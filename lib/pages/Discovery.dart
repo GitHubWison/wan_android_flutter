@@ -72,7 +72,7 @@ class KnowledgeSysTile extends StatelessWidget {
               style: TextStyle(
                   color: Colors.blue, fontSize: 25, letterSpacing: 5),
             ),
-            Wrap(children: knowledgeSys.children.map((m) {
+            Wrap(spacing:5,children: knowledgeSys.children.map((m) {
               return KnowledgeItem(m.name);
             }).toList(),),
 
@@ -90,11 +90,12 @@ class KnowledgeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text(knowledgeName),
-      decoration: BoxDecoration(color: Colors.blue,
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      width: 2,
-      padding: EdgeInsets.all(10),);
+   return ActionChip(onPressed: () {}, label: Text(knowledgeName),);
   }
+//   return Container(child: Text(knowledgeName),
+//      decoration: BoxDecoration(color: Colors.blue,
+//          borderRadius: BorderRadius.all(Radius.circular(30))),
+//      width: 2,
+//      padding: EdgeInsets.all(10),);
 
 }
