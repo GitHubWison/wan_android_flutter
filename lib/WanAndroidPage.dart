@@ -13,21 +13,27 @@ class WanAndroidPage extends StatefulWidget {
 class WanAndroidPageState extends State<WanAndroidPage> {
   final List navList = new List();
   var _currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold( appBar: AppBar(
-      leading: Text("首页"),
-      title: new Text("wan! android"),
-      actions: <Widget>[
-        new IconButton(icon: new Icon(Icons.search), onPressed: _toSearch)
-      ],
-    ),
+    return new Scaffold(
+      drawer: Drawer(
+        child: DrawerPage(),
+      ),
+      appBar: AppBar(
+        leading: Text("首页"),
+        title: new Text("wan! android"),
+        actions: <Widget>[
+          new IconButton(icon: new Icon(Icons.search), onPressed: _toSearch)
+        ],
+      ),
       body: MainBodyState(_currentPage),
       bottomNavigationBar: BottomNavState(_currentPage, (index) {
         setState(() {
           _currentPage = index;
         });
-      }),);
+      }),
+    );
   }
 
   @override
@@ -38,6 +44,67 @@ class WanAndroidPageState extends State<WanAndroidPage> {
 
 //跳转到搜索页面
   void _toSearch() {}
+}
+
+class DrawerPage extends StatelessWidget {
+  final drawerIcons = [
+    Icon(
+      Icons.favorite,
+      color: Colors.black,
+    ),
+    Icon(
+      Icons.settings,
+      color: Colors.black,
+    ),
+    Icon(
+      Icons.info_outline,
+      color: Colors.black,
+    ),
+    Icon(
+      Icons.power_settings_new,
+      color: Colors.black,
+    )
+  ];
+  final drawerTexts = [
+    Text('收藏'),
+    Text('设置'),
+    Text('关于我们'),
+    Text('退出'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        _getUserInfo(),
+        _getItemWidget(drawerIcons[0], drawerTexts[0]),
+        _getItemWidget(drawerIcons[1], drawerTexts[1]),
+        _getItemWidget(drawerIcons[2], drawerTexts[2]),
+        _getItemWidget(drawerIcons[3], drawerTexts[3]),
+      ],
+    );
+  }
+
+  Widget _getItemWidget(Icon icon, Text text) {
+    return Row(
+      children: <Widget>[icon, text],
+    );
+  }
+
+  Widget _getUserInfo() {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          Icon(Icons.person),
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Text('username'),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 class MainBodyState extends StatelessWidget {
