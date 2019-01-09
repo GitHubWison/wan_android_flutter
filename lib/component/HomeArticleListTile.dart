@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/WanAndroidNativeChannel.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
 import 'package:wan_android_flutter/component/ArticlePadding.dart';
+import 'package:wan_android_flutter/pages/WebViewPage.dart';
+
 class HomeArticleListTile extends StatelessWidget {
   final Article article;
 
@@ -41,7 +43,11 @@ class HomeArticleListTile extends StatelessWidget {
       ],
     );
     return GestureDetector(
-      onTap: openWebView,
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return WebViewPage(article.link, article.title);
+        }));
+      },
       child: Card(
         elevation: 0,
         child: Padding(
@@ -58,7 +64,16 @@ class HomeArticleListTile extends StatelessWidget {
     );
   }
 
-  void openWebView() async {
-    await WanAndroidNativeChannel.showWebView(article);
+  openWebView(BuildContext context) async {
+    //    使用原生的webview
+    //    await WanAndroidNativeChannel.showWebView(article);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return WebViewPage(article.link, article.title);
+    }));
   }
+
+//  void openWebView(BuildContext context) async {
+
+//    Navigator.of(context)
+//  }
 }
