@@ -106,6 +106,7 @@ class ArticleList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView.builder(
+        physics: AlwaysScrollableScrollPhysics(),
         controller: _loadMoreScrollController(),
         itemBuilder: (context, index) {
           return HomeArticleListTile(list[index]);

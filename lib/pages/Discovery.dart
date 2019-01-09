@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
 import 'package:wan_android_flutter/http/DioHelper.dart';
+import 'package:wan_android_flutter/pages/KnowLedgeArticle.dart';
 import 'package:wan_android_flutter/third_party/flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wan_android_flutter/component/Loading.dart';
 
@@ -58,24 +59,30 @@ class KnowledgeSysTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    String articleDetail = '';
+    for (var value in knowledgeSys.children) {
+      articleDetail += '${value.name}  ';
+    }
     return Card(
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/knowledge_article_list');
+          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+            return KnowledgeArticle(knowledgeSys);
+          }));
         },
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Column(children: [
-            Text(
+            Align(alignment: Alignment.centerLeft,child: Text(
               knowledgeSys.name,
-              style: TextStyle(
-                  color: Colors.blue, fontSize: 25, letterSpacing: 5),
-            ),
-            Wrap(spacing:5,children: knowledgeSys.children.map((m) {
-              return KnowledgeItem(m.name);
-            }).toList(),),
-
+              style:
+              TextStyle(color: Colors.blue, fontSize: 25, letterSpacing: 5),
+            ),),
+          Align(alignment: Alignment.centerLeft,child:
+            Text(
+              articleDetail,
+              style: TextStyle(color: Colors.grey, fontSize: 20,wordSpacing: 5),
+            ),)
           ]),
         ),
       ),
@@ -90,12 +97,8 @@ class KnowledgeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   return ActionChip(onPressed: () {}, label: Text(knowledgeName),);
+    return Chip(
+      label: Text(knowledgeName),
+    );
   }
-//   return Container(child: Text(knowledgeName),
-//      decoration: BoxDecoration(color: Colors.blue,
-//          borderRadius: BorderRadius.all(Radius.circular(30))),
-//      width: 2,
-//      padding: EdgeInsets.all(10),);
-
 }
