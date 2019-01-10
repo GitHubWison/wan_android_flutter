@@ -5,6 +5,7 @@ import 'package:wan_android_flutter/beans/entity.dart';
 import 'package:wan_android_flutter/component/HomeArticleListTile.dart';
 import 'package:wan_android_flutter/http/DioHelper.dart';
 import 'package:wan_android_flutter/component/Loading.dart';
+
 class Home extends StatefulWidget {
   @override
   HomeState createState() {
@@ -12,13 +13,14 @@ class Home extends StatefulWidget {
   }
 }
 
-class HomeState extends State<StatefulWidget> {
+class HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
   final List<Article> list = new List();
   final List<BannerBean> bannerList = new List();
   int pageNo = 0;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: <Widget>[
         Expanded(
@@ -88,6 +90,9 @@ class HomeState extends State<StatefulWidget> {
     _refreshArticleData();
     refreshBannerData();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ArticleList extends StatelessWidget {

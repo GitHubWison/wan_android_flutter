@@ -57,7 +57,7 @@ class KnowledgeArticleList extends StatefulWidget {
   }
 }
 
-class KnowledgeArticleListState extends State<KnowledgeArticleList> {
+class KnowledgeArticleListState extends State<KnowledgeArticleList> with AutomaticKeepAliveClientMixin<KnowledgeArticleList>{
   int cid = 0;
   List<Article> listData = new List();
   int pageNo = 0;
@@ -66,6 +66,7 @@ class KnowledgeArticleListState extends State<KnowledgeArticleList> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (listData == null || listData.length == 0) {
       return Loading();
     } else {
@@ -75,7 +76,6 @@ class KnowledgeArticleListState extends State<KnowledgeArticleList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _refreshData();
   }
@@ -109,4 +109,7 @@ class KnowledgeArticleListState extends State<KnowledgeArticleList> {
       return null;
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -12,12 +12,13 @@ class Discovery extends StatefulWidget {
   }
 }
 
-class DiscoveryState extends State<Discovery> with WidgetsBindingObserver {
+class DiscoveryState extends State<Discovery> with AutomaticKeepAliveClientMixin<Discovery> {
   String test = "";
   List<KnowledgeSys> list = List();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (list == null || list.length == 0) {
       return Loading();
     } else {
@@ -50,6 +51,10 @@ class DiscoveryState extends State<Discovery> with WidgetsBindingObserver {
       });
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
+
 }
 
 class KnowledgeSysTile extends StatelessWidget {

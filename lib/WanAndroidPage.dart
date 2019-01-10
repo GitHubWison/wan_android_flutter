@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wan_android_flutter/pages/AboutMe.dart';
+import 'package:wan_android_flutter/component/ArticlePadding.dart';
 import 'package:wan_android_flutter/pages/Discovery.dart';
 import 'package:wan_android_flutter/pages/Home.dart';
 
@@ -12,34 +12,30 @@ class WanAndroidPage extends StatefulWidget {
 
 class WanAndroidPageState extends State<WanAndroidPage> {
   final List navList = new List();
-  var _currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      drawer: Drawer(
-        child: DrawerPage(),
-      ),
-      appBar: AppBar(
-        leading: Text("首页"),
-        title: new Text("wan! android"),
-        actions: <Widget>[
-          new IconButton(icon: new Icon(Icons.search), onPressed: _toSearch)
-        ],
-      ),
-      body: MainBodyState(_currentPage),
-      bottomNavigationBar: BottomNavState(_currentPage, (index) {
-        setState(() {
-          _currentPage = index;
-        });
-      }),
-    );
+    return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          drawer: Drawer(
+            child: DrawerPage(),
+          ),
+          appBar: AppBar(
+            title: new Text("wan! android"),
+            actions: <Widget>[
+              new IconButton(icon: new Icon(Icons.search), onPressed: _toSearch)
+            ],
+          ),
+          body: MainBodyState(),
+          bottomNavigationBar: BottomNavState(),
+        ));
   }
 
   @override
   void initState() {
     super.initState();
-    navList..add(Home())..add(Discovery())..add(AboutMe());
+    navList..add(Home())..add(Discovery());
   }
 
 //跳转到搜索页面
@@ -65,11 +61,15 @@ class DrawerPage extends StatelessWidget {
       color: Colors.black,
     )
   ];
+  static const textStyle = TextStyle(color: Colors.black, fontSize: 18);
   final drawerTexts = [
-    Text('收藏'),
-    Text('设置'),
-    Text('关于我们'),
-    Text('退出'),
+    Text(
+      '收藏',
+      style: textStyle,
+    ),
+    Text('设置', style: textStyle),
+    Text('关于我们', style: textStyle),
+    Text('退出', style: textStyle),
   ];
 
   @override
@@ -86,59 +86,89 @@ class DrawerPage extends StatelessWidget {
   }
 
   Widget _getItemWidget(Icon icon, Text text) {
-    return Row(
-      children: <Widget>[icon, text],
+    return InkWell(
+      onTap: () {},
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: <Widget>[
+            icon,
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: text,
+            )
+          ],
+        ),
+      ),
     );
   }
 
   Widget _getUserInfo() {
-    return Padding(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          Icon(Icons.person),
-          Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Text('username'),
-          )
-        ],
+    return Container(
+      color: Colors.blue,
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: <Widget>[
+            CircleAvatar(
+              backgroundColor: Colors.black12,
+              minRadius: 0,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 80,
+                ),
+              ),
+            ),
+            ArticlePadding(),
+            Text(
+              'username',
+              style: TextStyle(fontSize: 30, color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class MainBodyState extends StatelessWidget {
-  final currentPage;
+//  final currentPage;
 
-  MainBodyState(this.currentPage);
+  MainBodyState();
 
   @override
   Widget build(BuildContext context) {
-    return IndexedStack(
-      index: currentPage,
-      children: [Home(), Discovery(), AboutMe()],
+    return TabBarView(
+      children: [Home(), Discovery()],
     );
   }
 }
 
 class BottomNavState extends StatelessWidget {
-  final currentPage;
-  final tapTest;
-
-  BottomNavState(this.currentPage, this.tapTest);
+  BottomNavState();
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: currentPage,
-      items: [
-        new BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
-        new BottomNavigationBarItem(
-            icon: Icon(Icons.widgets), title: Text("发现")),
-        new BottomNavigationBarItem(icon: Icon(Icons.person), title: Text("我的"))
+    return TabBar(
+      unselectedLabelColor: Colors.black,
+      labelColor: Colors.blue,
+      indicator: null,
+      tabs: <Widget>[
+        Tab(
+          text: "首页",
+          icon: Icon(Icons.home),
+        ),
+        Tab(
+          text: "发现",
+          icon: Icon(Icons.widgets),
+        )
       ],
-      fixedColor: Colors.blue,
-      onTap: tapTest,
     );
   }
 }
+/*new BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
+        new BottomNavigationBarItem(
+            icon: Icon(Icons.widgets), title: Text("发现")),*/
