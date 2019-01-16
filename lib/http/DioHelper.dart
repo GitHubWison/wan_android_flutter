@@ -39,7 +39,7 @@ class WanAndroidDio {
 
   void doGet(String address,
       {data, onSuccess, onSerFailure, onNetError, onFinish}) async {
-    try {
+//    try {
       Response r = await _dio.get(address, data: data);
       if (r.statusCode == 200) {
         final WanAndroidBean responseData = WanAndroidBean.fromJson(r.data);
@@ -65,8 +65,8 @@ class WanAndroidDio {
       if (onFinish != null) {
         onFinish();
       }
-    } catch (e) {
-      print("some thing null == $e");
-    }
+//    } catch (e) {
+//      print("some thing null == $e");
+//    }
   }
 }

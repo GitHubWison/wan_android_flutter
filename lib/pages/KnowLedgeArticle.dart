@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
+import 'package:wan_android_flutter/component/ArticleList.dart';
 import 'package:wan_android_flutter/component/Loading.dart';
 import 'package:wan_android_flutter/http/DioHelper.dart';
 import 'package:wan_android_flutter/pages/Home.dart';

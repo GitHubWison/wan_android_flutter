@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:wan_android_flutter/component/ArticlePadding.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:wan_android_flutter/component/DrawerPage.dart';
 import 'package:wan_android_flutter/pages/Discovery.dart';
 import 'package:wan_android_flutter/pages/Home.dart';
+import 'package:wan_android_flutter/redux_state.dart';
 
 class WanAndroidPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new WanAndroidPageState();
+    Store<WanAndroidState> store = Store(reduce,
+        initialState:
+            WanAndroidState(homeArticleList: List(), homeBannerList: List()));
+    return new WanAndroidPageState(store);
   }
 }
 
 class WanAndroidPageState extends State<WanAndroidPage> {
-  final List navList = new List();
+  final Store<WanAndroidState> store;
+
+  WanAndroidPageState(this.store);
 
   @override
   Widget build(BuildContext context) {
+    return StoreProvider<WanAndroidState>(
+      store: store,
+      child: _getMainApp(),
+    );
+  }
+
+  DefaultTabController _getMainApp() {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -33,17 +47,9 @@ class WanAndroidPageState extends State<WanAndroidPage> {
         ));
   }
 
-  @override
-  void initState() {
-    super.initState();
-    navList..add(Home())..add(Discovery());
-  }
-
 //跳转到搜索页面
   void _toSearch() {}
 }
-
-
 
 class MainBodyState extends StatelessWidget {
 //  final currentPage;
@@ -80,6 +86,3 @@ class BottomNavState extends StatelessWidget {
     );
   }
 }
-/*new BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("首页")),
-        new BottomNavigationBarItem(
-            icon: Icon(Icons.widgets), title: Text("发现")),*/
