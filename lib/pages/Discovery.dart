@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
-import 'package:wan_android_flutter/http/DioHelper.dart';
-import 'package:wan_android_flutter/pages/KnowLedgeArticle.dart';
+import 'package:wan_android_flutter/component/Loading.dart';
 import 'package:wan_android_flutter/pages/KnowLedgeArticleV2.dart';
 import 'package:wan_android_flutter/redux_state.dart';
 import 'package:wan_android_flutter/repo/repositories.dart';
 import 'package:wan_android_flutter/third_party/flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:wan_android_flutter/component/Loading.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:wan_android_flutter/routes.dart';
 class Discovery extends StatefulWidget {
   @override
   DiscoveryState createState() {
