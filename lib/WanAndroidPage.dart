@@ -1,32 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:wan_android_flutter/component/DrawerPage.dart';
 import 'package:wan_android_flutter/pages/Discovery.dart';
 import 'package:wan_android_flutter/pages/Home.dart';
-import 'package:wan_android_flutter/redux_state.dart';
 
 class WanAndroidPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    Store<WanAndroidState> store = Store(reduce,
-        initialState:
-            WanAndroidState(homeArticleList: List(), homeBannerList: List()));
-    return new WanAndroidPageState(store);
+   return new WanAndroidPageState();
   }
 }
 
 class WanAndroidPageState extends State<WanAndroidPage> {
-  final Store<WanAndroidState> store;
 
-  WanAndroidPageState(this.store);
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<WanAndroidState>(
-      store: store,
-      child: _getMainApp(),
-    );
+    return _getMainApp();
   }
 
   DefaultTabController _getMainApp() {

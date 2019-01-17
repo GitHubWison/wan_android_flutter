@@ -22,12 +22,17 @@ class HomeState extends State<Home> with AutomaticKeepAliveClientMixin<Home> {
   Store<WanAndroidState> _getWanAndroidState() {
     return StoreProvider.of(context);
   }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _refreshArticleData();
-    refreshBannerData();
+    if (_getWanAndroidState().state.homeArticleList.length==0) {
+      _refreshArticleData();
+    }
+    if (_getWanAndroidState().state.homeBannerList.length==0) {
+      refreshBannerData();
+    }
+
+
   }
 
   @override

@@ -248,6 +248,7 @@ class BannerBean {
 }
 
 
+///////////////////////////////
 class KnowledgeSys {
   List<Children> children;
   int courseId;
@@ -301,6 +302,7 @@ class KnowledgeSys {
 }
 
 class Children {
+  List<Article> children = List();
   int courseId;
   int id;
   String name;
@@ -310,7 +312,8 @@ class Children {
   int visible;
 
   Children(
-      {this.courseId,
+      {this.children,
+        this.courseId,
         this.id,
         this.name,
         this.order,
@@ -319,6 +322,12 @@ class Children {
         this.visible});
 
   Children.fromJson(Map<String, dynamic> json) {
+    if (json['Article'] != null) {
+      children = new List<Article>();
+      json['Article'].forEach((v) {
+        children.add(new Article.fromJson(v));
+      });
+    }
     courseId = json['courseId'];
     id = json['id'];
     name = json['name'];
@@ -330,6 +339,9 @@ class Children {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.children != null) {
+      data['Article'] = this.children.map((v) => v.toJson()).toList();
+    }
     data['courseId'] = this.courseId;
     data['id'] = this.id;
     data['name'] = this.name;
@@ -340,3 +352,5 @@ class Children {
     return data;
   }
 }
+
+//////////////////////////////

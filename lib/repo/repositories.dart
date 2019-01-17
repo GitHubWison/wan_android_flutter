@@ -3,10 +3,9 @@ import 'package:redux/redux.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
 import 'package:wan_android_flutter/redux_state.dart';
 import 'package:wan_android_flutter/http/DioHelper.dart';
-
 class WanAndroidRepository {
   static WanAndroidRepository _instance;
-
+  static Store<WanAndroidState> storeTest;
   factory WanAndroidRepository() => _getInstance();
 
   static WanAndroidRepository get instance => _getInstance();
@@ -50,5 +49,57 @@ class WanAndroidRepository {
       originalList.addAll(responseList);
       store.dispatch(RefreshHomeBannerListAction(originalList));
     });
+  }
+
+//  获取知识树
+  void getTree(Store<WanAndroidState> store) {
+    WanAndroidDio.instance.doGet("tree/json", onSuccess: (WanAndroidBean data) {
+      List temp = data.data;
+      List<KnowledgeSys> responseList = temp.map((m) {
+        return KnowledgeSys.fromJson(m);
+      }).toList();
+      List<KnowledgeSys> originalList = store.state.treeList;
+      originalList.clear();
+      originalList.addAll(responseList);
+      store.dispatch(RefreshTreeAction(originalList));
+    });
+  }
+
+  void getKnowledgeInfo(Store<WanAndroidState> store,KnowledgeSys info)
+  {
+    store.dispatch(RefreshKnowledgeInfoAction(info));
+  }
+
+//  获取知识树中某一个知识下的某个领域的内容
+  void getKnowledgeUnderTree(
+      Store<WanAndroidState> store, int cid, int pageNo,int indicateIndex) {
+    WanAndroidDio.instance.doGet('article/list/$pageNo/json?cid=$cid',
+        onSuccess: (WanAndroidBean data) {
+      Data allData = Data.fromJson(data.data);
+      List<Article> tempList = allData.datas;
+      KnowledgeSys originalInfo = store.state.knowledgeInfo;
+      Children originalArticleList = originalInfo.children[indicateIndex];
+      if (pageNo == 0) {
+        originalArticleList.children.clear();
+      }
+      originalArticleList.children.addAll(tempList);
+
+//      for (var value in originalInfo.children) {
+//        if (value.id == cid) {
+//          if (pageNo == 0) {
+//            value.children.clear();
+//          }
+//          value.children.addAll(tempList);
+//          break;
+//        }
+//      }
+      store.dispatch(RefreshKnowledgeInfoAction(originalInfo));
+    });
+    /* WanAndroidDio.instance.doGet('article/list/$offset/json?cid=$cid',
+        onSuccess: (WanAndroidBean data) {
+      Data allData = Data.fromJson(data.data);
+      List<Article> tempList = allData.datas;
+      doNext(tempList);
+    });*/
   }
 }
