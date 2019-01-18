@@ -3,7 +3,7 @@ import 'package:wan_android_flutter/WanAndroidNativeChannel.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
 import 'package:wan_android_flutter/component/ArticlePadding.dart';
 import 'package:wan_android_flutter/pages/WebViewPage.dart';
-
+import 'package:wan_android_flutter/database/sqflite_helper.dart';
 class HomeArticleListTile extends StatelessWidget {
   final Article article;
 
@@ -35,13 +35,16 @@ class HomeArticleListTile extends StatelessWidget {
         )
       ],
     );
-    Column _column2 = Column(
+    Widget _column2 = InkWell(onTap: (){
+//      加入数据库
+      SqlFlutterHelper.instance.articleDao.insert(article);
+    },child: Column(
       children: <Widget>[
         Text('${article.niceDate}'),
         ArticlePadding(),
         Icon(Icons.favorite_border)
       ],
-    );
+    ));
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {

@@ -84,22 +84,7 @@ class WanAndroidRepository {
       }
       originalArticleList.children.addAll(tempList);
 
-//      for (var value in originalInfo.children) {
-//        if (value.id == cid) {
-//          if (pageNo == 0) {
-//            value.children.clear();
-//          }
-//          value.children.addAll(tempList);
-//          break;
-//        }
-//      }
       store.dispatch(RefreshKnowledgeInfoAction(originalInfo));
     });
-    /* WanAndroidDio.instance.doGet('article/list/$offset/json?cid=$cid',
-        onSuccess: (WanAndroidBean data) {
-      Data allData = Data.fromJson(data.data);
-      List<Article> tempList = allData.datas;
-      doNext(tempList);
-    });*/
   }
 }
