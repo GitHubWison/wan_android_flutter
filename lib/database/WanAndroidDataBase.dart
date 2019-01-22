@@ -13,7 +13,6 @@ class WandAndroidDataBaseHelper {
       _dataBase = await openDatabase(path, version: 1,
           onCreate: (Database db, int version) async {
 //        建表
-        print("=====开始建表=====");
         db.execute('''
       CREATE TABLE ${ArticleDao.tb_name} (_id INTEGER PRIMARY KEY AUTOINCREMENT,
       chapterId INTEGER,apkLink TEXT,tags TEXT,chapterName TEXT,
@@ -28,7 +27,6 @@ class WandAndroidDataBaseHelper {
             (_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,
             url TEXT,id INTEGER)
             ''');
-        print("=====建表结束=====");
       });
     }
     return _dataBase;

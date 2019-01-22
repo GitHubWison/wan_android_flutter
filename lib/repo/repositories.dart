@@ -1,11 +1,14 @@
 //数据仓库
 import 'package:redux/redux.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
+import 'package:wan_android_flutter/database/WanAndroidDataBase.dart';
 import 'package:wan_android_flutter/redux_state.dart';
 import 'package:wan_android_flutter/http/DioHelper.dart';
+
 class WanAndroidRepository {
   static WanAndroidRepository _instance;
   static Store<WanAndroidState> storeTest;
+
   factory WanAndroidRepository() => _getInstance();
 
   static WanAndroidRepository get instance => _getInstance();
@@ -65,14 +68,13 @@ class WanAndroidRepository {
     });
   }
 
-  void getKnowledgeInfo(Store<WanAndroidState> store,KnowledgeSys info)
-  {
+  void getKnowledgeInfo(Store<WanAndroidState> store, KnowledgeSys info) {
     store.dispatch(RefreshKnowledgeInfoAction(info));
   }
 
 //  获取知识树中某一个知识下的某个领域的内容
   void getKnowledgeUnderTree(
-      Store<WanAndroidState> store, int cid, int pageNo,int indicateIndex) {
+      Store<WanAndroidState> store, int cid, int pageNo, int indicateIndex) {
     WanAndroidDio.instance.doGet('article/list/$pageNo/json?cid=$cid',
         onSuccess: (WanAndroidBean data) {
       Data allData = Data.fromJson(data.data);
@@ -86,5 +88,18 @@ class WanAndroidRepository {
 
       store.dispatch(RefreshKnowledgeInfoAction(originalInfo));
     });
+  }
+
+//  获取收藏的文章
+  void getFavoriteArticleList(Store<WanAndroidState> store) async {
+    var favList = await ArticleDao.instance.getFavorite();
+    store.dispatch(RefreshFavoriteListAction(favList));
+  }
+
+//  添加收藏的文章
+  void addFavoriteArticleList(Store<WanAndroidState> store, Article article) async{
+//    将添加的文章放入数据库中
+    await ArticleDao.instance.insert(article);
+    store.dispatch(AddFavoriteListAction(article));
   }
 }
