@@ -1,4 +1,3 @@
-
 class WanAndroidBean<T> {
   T data;
   int errorCode;
@@ -21,7 +20,6 @@ class WanAndroidBean<T> {
   }
 }
 
-
 class Data {
   int curPage;
   List<Article> datas;
@@ -33,12 +31,12 @@ class Data {
 
   Data(
       {this.curPage,
-        this.datas,
-        this.offset,
-        this.over,
-        this.pageCount,
-        this.size,
-        this.total});
+      this.datas,
+      this.offset,
+      this.over,
+      this.pageCount,
+      this.size,
+      this.total});
 
   Data.fromJson(Map<String, dynamic> json) {
     curPage = json['curPage'];
@@ -97,39 +95,41 @@ class Article {
 
   Article(
       {this.apkLink,
-        this.author,
-        this.chapterId,
-        this.chapterName,
-        this.collect,
-        this.courseId,
-        this.desc,
-        this.envelopePic,
-        this.fresh,
-        this.id,
-        this.link,
-        this.niceDate,
-        this.origin,
-        this.projectLink,
-        this.publishTime,
-        this.superChapterId,
-        this.superChapterName,
-        this.tags,
-        this.title,
-        this.type,
-        this.userId,
-        this.visible,
-        this.zan});
+      this.author,
+      this.chapterId,
+      this.chapterName,
+      this.collect,
+      this.courseId,
+      this.desc,
+      this.envelopePic,
+      this.fresh,
+      this.id,
+      this.link,
+      this.niceDate,
+      this.origin,
+      this.projectLink,
+      this.publishTime,
+      this.superChapterId,
+      this.superChapterName,
+      this.tags,
+      this.title,
+      this.type,
+      this.userId,
+      this.visible,
+      this.zan});
 
   Article.fromJson(Map<String, dynamic> json) {
     apkLink = json['apkLink'];
     author = json['author'];
     chapterId = json['chapterId'];
     chapterName = json['chapterName'];
-    collect = json['collect'];
+    var mCollect = json['collect'];
+    collect = (mCollect is int)?(mCollect ==1):mCollect;
     courseId = json['courseId'];
     desc = json['desc'];
     envelopePic = json['envelopePic'];
-    fresh = json['fresh'];
+    var mFresh = json['fresh'];
+    fresh = (mFresh is int)?(mFresh == 1):mFresh;
     id = json['id'];
     link = json['link'];
     niceDate = json['niceDate'];
@@ -141,6 +141,7 @@ class Article {
     if (json['tags'] != null) {
       tags = new List<Tags>();
       json['tags'].forEach((v) {
+        v['id'] = id;
         tags.add(new Tags.fromJson(v));
       });
     }
@@ -150,6 +151,7 @@ class Article {
     visible = json['visible'];
     zan = json['zan'];
   }
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -185,22 +187,24 @@ class Article {
 class Tags {
   String name;
   String url;
+  int id;
 
-  Tags({this.name, this.url});
+  Tags({this.name, this.url, this.id});
 
   Tags.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     url = json['url'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['url'] = this.url;
+    data['id'] = this.id;
     return data;
   }
 }
-
 
 class BannerBean {
   String desc;
@@ -247,7 +251,6 @@ class BannerBean {
   }
 }
 
-
 ///////////////////////////////
 class KnowledgeSys {
   List<Children> children;
@@ -261,13 +264,13 @@ class KnowledgeSys {
 
   KnowledgeSys(
       {this.children,
-        this.courseId,
-        this.id,
-        this.name,
-        this.order,
-        this.parentChapterId,
-        this.userControlSetTop,
-        this.visible});
+      this.courseId,
+      this.id,
+      this.name,
+      this.order,
+      this.parentChapterId,
+      this.userControlSetTop,
+      this.visible});
 
   KnowledgeSys.fromJson(Map<String, dynamic> json) {
     if (json['children'] != null) {
@@ -313,13 +316,13 @@ class Children {
 
   Children(
       {this.children,
-        this.courseId,
-        this.id,
-        this.name,
-        this.order,
-        this.parentChapterId,
-        this.userControlSetTop,
-        this.visible});
+      this.courseId,
+      this.id,
+      this.name,
+      this.order,
+      this.parentChapterId,
+      this.userControlSetTop,
+      this.visible});
 
   Children.fromJson(Map<String, dynamic> json) {
     if (json['Article'] != null) {
