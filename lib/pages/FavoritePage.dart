@@ -20,6 +20,7 @@ class FavoriteState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("收藏"),),
       body: StoreConnector<WanAndroidState, List<Article>>(
         converter: (store) {
           return store.state.favoriteList;
