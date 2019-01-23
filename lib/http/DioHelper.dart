@@ -37,36 +37,69 @@ class WanAndroidDio {
     return _instance;
   }
 
+  void doPost(String address,
+      {data, onSuccess, onSerFailure, onNetError, onFinish}) async {
+    _httpRequest(address,
+        data: data,
+        onSuccess: onSuccess,
+        onFinish: onFinish,
+        onSerFailure: onSerFailure,
+        isGet: false);
+  }
+
   void doGet(String address,
       {data, onSuccess, onSerFailure, onNetError, onFinish}) async {
-//    try {
-      Response r = await _dio.get(address, data: data);
-      if (r.statusCode == 200) {
-        final WanAndroidBean responseData = WanAndroidBean.fromJson(r.data);
-        if (responseData.errorCode == SUCCESS_CODE) {
+    _httpRequest(address,
+        data: data,
+        onSuccess: onSuccess,
+        onFinish: onFinish,
+        onSerFailure: onSerFailure,
+        isGet: true);
+  }
+
+  void _httpRequest(String address,
+      {bool isGet = true,
+      data,
+      onSuccess,
+      onSerFailure,
+      onNetError,
+      onFinish}) async {
+    Response r = isGet
+        ? await _dio.get(address, data: data)
+        : await _dio.post(address, data: data);
+    if (r.statusCode == 200) {
+      final WanAndroidBean responseData = WanAndroidBean.fromJson(r.data);
+      if (responseData.errorCode == SUCCESS_CODE) {
 //        请求成功
+        if (onSuccess != null) {
           onSuccess(responseData);
-          print("""
+        }
+      } else {
+//        服务端报错
+        if (onSerFailure != null) {
+          onSerFailure(responseData);
+        }
+      }
+      print("""
           ===========================================
           ==请求url:${_dio.options.baseUrl}$address
           ==请求参数:${data.toString()}
           ==请求结果:${r.data}
           ===========================================
           """);
-
-        } else {
-//        服务端报错
-          onSerFailure(responseData);
-        }
-      } else {
+    } else {
 //      404,406等
+      if (onNetError != null) {
         onNetError(r.statusCode);
       }
-      if (onFinish != null) {
-        onFinish();
-      }
-//    } catch (e) {
-//      print("some thing null == $e");
-//    }
+      print("""
+      ===============================
+      ==onNetError=${r.statusCode}
+      ===============================
+      """);
+    }
+    if (onFinish != null) {
+      onFinish();
+    }
   }
 }
