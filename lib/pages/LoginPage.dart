@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/component/ArticlePadding.dart';
 import 'package:wan_android_flutter/component/EditTextWithClearState.dart';
 import 'package:wan_android_flutter/component/Snack.dart';
+import 'package:wan_android_flutter/http/ApiAddress.dart';
+import 'package:wan_android_flutter/http/DioHelper.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -64,5 +66,9 @@ class LoginState extends State<LoginPage> {
       Snack.show(context, "用户名/密码不能为空!");
       return;
     }
+    WanAndroidDio.instance.doPost(ApiAddress.login_api,data: {
+      "username":userName,
+      "password":passWord
+    });
   }
 }
