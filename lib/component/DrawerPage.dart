@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wan_android_flutter/component/ArticlePadding.dart';
 import 'package:wan_android_flutter/pages/FavoritePage.dart';
+import 'package:wan_android_flutter/pages/LoginPage.dart';
+import 'package:wan_android_flutter/routes.dart';
 class DrawerPage extends StatelessWidget {
   final drawerIcons = [
     Icon(
@@ -36,19 +38,22 @@ class DrawerPage extends StatelessWidget {
     return ListView(
       children: <Widget>[
         _getUserInfo(),
-        _getItemWidget(drawerIcons[0], drawerTexts[0],onclick: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+        _getItemWidget(drawerIcons[0], drawerTexts[0], onclick: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return FavoritePage();
           }));
         }),
-        _getItemWidget(drawerIcons[1], drawerTexts[1]),
+        _getItemWidget(drawerIcons[1], drawerTexts[1], onclick: () {
+          Navigator.of(context).pushNamed(loginRoute);
+        }),
         _getItemWidget(drawerIcons[2], drawerTexts[2]),
         _getItemWidget(drawerIcons[3], drawerTexts[3]),
       ],
     );
   }
 
-  Widget _getItemWidget(Icon icon, Text text,{onclick}) {
+
+  Widget _getItemWidget(Icon icon, Text text, {onclick}) {
     return InkWell(
       onTap: onclick,
       child: Padding(
@@ -96,3 +101,5 @@ class DrawerPage extends StatelessWidget {
     );
   }
 }
+
+
