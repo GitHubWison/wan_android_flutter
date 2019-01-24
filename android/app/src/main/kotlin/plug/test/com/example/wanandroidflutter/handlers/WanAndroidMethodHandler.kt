@@ -28,6 +28,10 @@ class WanAndroidMethodHandler(private val activity: Activity) :MethodChannel.Met
                 intent.putExtra("title",title)
                 activity.startActivity(intent)
             }
+            "showToast"->{
+                val msg = methodCall.argument<String>("msg")
+                Toast.makeText(activity,msg,Toast.LENGTH_LONG).show()
+            }
             else -> {
             }
         }
