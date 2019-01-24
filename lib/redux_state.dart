@@ -10,13 +10,16 @@ class WanAndroidState {
 //  知识体系的下一个详情页面
   final KnowledgeSys knowledgeInfo;
   final List<Article> favoriteList;
+//登录后的用户信息存储　
+  final UserInfo userInfo;
 
   WanAndroidState(
       {this.homeArticleList,
       this.homeBannerList,
       this.treeList,
       this.knowledgeInfo,
-      this.favoriteList});
+      this.favoriteList,
+      this.userInfo});
 }
 
 WanAndroidState reduce(WanAndroidState state, dynamic action) {
@@ -25,7 +28,8 @@ WanAndroidState reduce(WanAndroidState state, dynamic action) {
       homeBannerList: homeBannerListReducer(state.homeBannerList, action),
       treeList: treeListReducer(state.treeList, action),
       knowledgeInfo: knowledgeInfo(state.knowledgeInfo, action),
-      favoriteList: favoriteList(state.favoriteList, action));
+      favoriteList: favoriteList(state.favoriteList, action),
+      userInfo: userInfo(state.userInfo,action));
 }
 
 //reduce
@@ -36,7 +40,9 @@ var homeBannerListReducer = combineReducers<List<BannerBean>>([
   TypedReducer<List<BannerBean>, RefreshHomeBannerListAction>(
       _refreshHomeBannerList)
 ]);
-
+var userInfo = combineReducers<UserInfo>([
+  TypedReducer<UserInfo,RefreshUserInfoAction>(_getUserInfo)
+]);
 var treeListReducer = combineReducers<List<KnowledgeSys>>(
     [TypedReducer<List<KnowledgeSys>, RefreshTreeAction>(_rRefreshTree)]);
 var knowledgeInfo = combineReducers<KnowledgeSys>([
@@ -46,7 +52,9 @@ var favoriteList = combineReducers<List<Article>>([
   TypedReducer<List<Article>, RefreshFavoriteListAction>(_refreshFavoriteList),
   TypedReducer<List<Article>, AddFavoriteListAction>(_addFavoriteArticle),
 ]);
-
+UserInfo _getUserInfo(UserInfo userInfo, RefreshUserInfoAction action){
+  return action.userInfo;
+}
 List<Article> _addFavoriteArticle(
     List<Article> articleList, AddFavoriteListAction action) {
   Article temp = action.article;
@@ -129,4 +137,10 @@ class AddFavoriteListAction {
   final Article article;
 
   AddFavoriteListAction(this.article);
+}
+class RefreshUserInfoAction{
+  final UserInfo userInfo;
+
+  RefreshUserInfoAction(this.userInfo);
+
 }

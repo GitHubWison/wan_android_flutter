@@ -15,7 +15,8 @@ void main() => runApp(StoreProvider(
           homeBannerList: List(),
           treeList: List(),
           knowledgeInfo: KnowledgeSys(children: List()),
-          favoriteList: List()),
+          favoriteList: List(),
+          userInfo: UserInfo()),
     ),
     child: MaterialApp(
       home: SplashPage(),

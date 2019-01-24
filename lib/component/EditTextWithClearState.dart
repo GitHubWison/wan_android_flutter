@@ -20,16 +20,9 @@ class EditTextWithClearState extends State<EditTextWithClear> {
 
   @override
   Widget build(BuildContext context) {
-    var focusNode = FocusNode();
-    focusNode.addListener((){
-      setState(() {
-        isClearVisible =  focusNode.hasFocus;
-      });
-
-    });
     return TextField(
       onChanged: onTextChanged,
-      focusNode: focusNode,
+//      focusNode: focusNode,
       style: TextStyle(fontSize: 25),
       obscureText: widget.obscureText,
       keyboardType: widget.inputType,

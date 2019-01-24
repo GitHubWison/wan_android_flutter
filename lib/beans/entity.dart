@@ -124,12 +124,12 @@ class Article {
     chapterId = json['chapterId'];
     chapterName = json['chapterName'];
     var mCollect = json['collect'];
-    collect = (mCollect is int)?(mCollect ==1):mCollect;
+    collect = (mCollect is int) ? (mCollect == 1) : mCollect;
     courseId = json['courseId'];
     desc = json['desc'];
     envelopePic = json['envelopePic'];
     var mFresh = json['fresh'];
-    fresh = (mFresh is int)?(mFresh == 1):mFresh;
+    fresh = (mFresh is int) ? (mFresh == 1) : mFresh;
     id = json['id'];
     link = json['link'];
     niceDate = json['niceDate'];
@@ -151,7 +151,6 @@ class Article {
     visible = json['visible'];
     zan = json['zan'];
   }
-
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -357,3 +356,48 @@ class Children {
 }
 
 //////////////////////////////
+
+class UserInfo {
+  List<int> collectIds = List();
+  String email;
+  String icon;
+  int id;
+  String password;
+  String token;
+  int type;
+  String username;
+
+  UserInfo(
+      {this.collectIds,
+      this.email = "",
+      this.icon="",
+      this.id=-1,
+      this.password="",
+      this.token="",
+      this.type=-1,
+      this.username=""});
+
+  UserInfo.fromJson(Map<String, dynamic> json) {
+    collectIds = json['collectIds'].cast<int>();
+    email = json['email'];
+    icon = json['icon'];
+    id = json['id'];
+    password = json['password'];
+    token = json['token'];
+    type = json['type'];
+    username = json['username'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['collectIds'] = this.collectIds;
+    data['email'] = this.email;
+    data['icon'] = this.icon;
+    data['id'] = this.id;
+    data['password'] = this.password;
+    data['token'] = this.token;
+    data['type'] = this.type;
+    data['username'] = this.username;
+    return data;
+  }
+}

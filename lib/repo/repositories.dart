@@ -1,7 +1,11 @@
 //数据仓库
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
+import 'package:wan_android_flutter/component/Snack.dart';
 import 'package:wan_android_flutter/database/WanAndroidDataBase.dart';
+import 'package:wan_android_flutter/http/ApiAddress.dart';
 import 'package:wan_android_flutter/redux_state.dart';
 import 'package:wan_android_flutter/http/DioHelper.dart';
 
@@ -97,9 +101,27 @@ class WanAndroidRepository {
   }
 
 //  添加收藏的文章
-  void addFavoriteArticleList(Store<WanAndroidState> store, Article article) async{
+  void addFavoriteArticleList(
+      Store<WanAndroidState> store, Article article) async {
 //    将添加的文章放入数据库中
     await ArticleDao.instance.insert(article);
     store.dispatch(AddFavoriteListAction(article));
+  }
+
+//  登录
+  void login(Store<WanAndroidState> store, String userName, String passWord,
+      BuildContext context) async {
+    WanAndroidDio.instance.doPost(ApiAddress.login_api,
+        data: FormData.from({'username': userName, 'password': passWord}),
+        onSuccess: (WanAndroidBean data) {
+      UserInfo userInfo = UserInfo.fromJson(data.data);
+      store.dispatch(RefreshUserInfoAction(userInfo));
+      Navigator.of(context).pop();
+    }, onSerFailure: (WanAndroidBean data) {
+      Snack.show(context, data.errorMsg);
+    },
+    onNetError: (){
+      Snack.show(context, "网络不通");
+    });
   }
 }
