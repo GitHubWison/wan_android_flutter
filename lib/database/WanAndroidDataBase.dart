@@ -23,6 +23,13 @@ class WandAndroidDataBaseHelper {
       author TEXT)
       ''');
         db.execute('''
+      CREATE TABLE ${FavoriteArticleDao.tb_name} (_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      chapterName TEXT,originId INTEGER,origin TEXT,desc TEXT,author TEXT,
+      courseId INTEGER,chapterId INTEGER,title TEXT,zan INTEGER,
+      publishTime INTEGER,niceDate TEXT,userId INTEGER,visible INTEGER,
+      link TEXT,id INTEGER,envelopePic TEXT)
+      ''');
+        db.execute('''
             CREATE TABLE ${TagsDao.tb_name} 
             (_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,
             url TEXT,id INTEGER)
@@ -33,17 +40,66 @@ class WandAndroidDataBaseHelper {
   }
 }
 
+class FavoriteArticleDao {
+  static const tb_name = 'favorite_article_tb';
+  static FavoriteArticleDao _instance;
+
+  static FavoriteArticleDao get instance => _getInstance();
+
+  factory FavoriteArticleDao() => _getInstance();
+
+  static FavoriteArticleDao _getInstance() {
+    if (_instance == null) {
+      _instance = FavoriteArticleDao._internal();
+    }
+    return _instance;
+  }
+
+  FavoriteArticleDao._internal();
+
+//插入收藏的列表
+  Future<Null> insert(List<FavoriteArticle> list) async {
+    Database db = await WandAndroidDataBaseHelper.getDb();
+    for (var value in list) {
+      await db.insert(tb_name, value.toJson());
+    }
+    return null;
+  }
+//插入单个文章
+  Future<Null> insertSingleArticle(FavoriteArticle article) async {
+    Database db = await WandAndroidDataBaseHelper.getDb();
+    await db.insert(tb_name, article.toJson());
+    return null;
+  }
+
+//  删除所有收藏
+  Future<Null> deleteAll() async {
+    Database db = await WandAndroidDataBaseHelper.getDb();
+    db.delete(tb_name);
+    return null;
+  }
+
+//  删除指定的文章
+  Future<Null> deleteArticleWithId(int id) async {
+    Database db = await WandAndroidDataBaseHelper.getDb();
+    db.delete(tb_name, where: 'id=?', whereArgs: [id]);
+    return null;
+  }
+}
+
 class ArticleDao {
   static const tb_name = 'article_tb';
   static ArticleDao _instance;
 
   factory ArticleDao() => _getInstance();
+
   ArticleDao._internal();
+
   static ArticleDao get instance => _getInstance();
 
   static ArticleDao _getInstance() {
     if (_instance == null) {
-      _instance =  ArticleDao._internal();
+      _instance = ArticleDao._internal();
     }
     return _instance;
   }
@@ -78,7 +134,9 @@ class TagsDao {
   static TagsDao _instance;
 
   factory TagsDao() => _getInstance();
+
   TagsDao._internal();
+
   static TagsDao get instance => _getInstance();
 
   static TagsDao _getInstance() {

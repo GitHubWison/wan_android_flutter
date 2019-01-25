@@ -30,7 +30,7 @@ class WanAndroidRepository {
   void getHomeArticleListWithPageNo(Store<WanAndroidState> store,
       {int pageNo = 0}) {
     WanAndroidDio.instance.doGet("article/list/$pageNo/json",
-        onSuccess: (data,r) {
+        onSuccess: (data, r) {
       Data tempData = Data.fromJson(data.data);
       List<Article> responseList = tempData.datas;
       List<Article> resList = store.state.homeArticleList;
@@ -45,8 +45,7 @@ class WanAndroidRepository {
 
 //获取首页的广告列表
   void getHomeBannerList(Store<WanAndroidState> store) {
-    WanAndroidDio.instance.doGet("banner/json",
-        onSuccess: (data,r) {
+    WanAndroidDio.instance.doGet("banner/json", onSuccess: (data, r) {
       List tempList = data.data;
       List<BannerBean> responseList = tempList.map((m) {
         return BannerBean.fromJson(m);
@@ -60,7 +59,8 @@ class WanAndroidRepository {
 
 //  获取知识树
   void getTree(Store<WanAndroidState> store) {
-    WanAndroidDio.instance.doGet("tree/json", onSuccess: (WanAndroidBean data,r) {
+    WanAndroidDio.instance.doGet("tree/json",
+        onSuccess: (WanAndroidBean data, r) {
       List temp = data.data;
       List<KnowledgeSys> responseList = temp.map((m) {
         return KnowledgeSys.fromJson(m);
@@ -80,7 +80,7 @@ class WanAndroidRepository {
   void getKnowledgeUnderTree(
       Store<WanAndroidState> store, int cid, int pageNo, int indicateIndex) {
     WanAndroidDio.instance.doGet('article/list/$pageNo/json?cid=$cid',
-        onSuccess: (WanAndroidBean data,r) {
+        onSuccess: (WanAndroidBean data, r) {
       Data allData = Data.fromJson(data.data);
       List<Article> tempList = allData.datas;
       KnowledgeSys originalInfo = store.state.knowledgeInfo;
@@ -94,38 +94,24 @@ class WanAndroidRepository {
     });
   }
 
-//  获取收藏的文章
-  void getFavoriteArticleList(Store<WanAndroidState> store) async {
-    var favList = await ArticleDao.instance.getFavorite();
-    store.dispatch(RefreshFavoriteListAction(favList));
-  }
-
-//  添加收藏的文章
-  void addFavoriteArticleList(
-      Store<WanAndroidState> store, Article article) async {
-//    将添加的文章放入数据库中
-    await ArticleDao.instance.insert(article);
-    store.dispatch(AddFavoriteListAction(article));
-  }
-
 //  登录
   void login(Store<WanAndroidState> store, String userName, String passWord,
-  {AfterSuccess afterSuccess}) async {
+      {AfterSuccess afterSuccess}) async {
     WanAndroidDio.instance.doPost(ApiAddress.login_api,
         data: FormData.from({'username': userName, 'password': passWord}),
-        onSuccess: (WanAndroidBean data,Response r) {
+        onSuccess: (WanAndroidBean data, Response r) {
       UserInfo userInfo = UserInfo.fromJson(data.data);
       String resCookie = '';
-      r.headers.forEach((String name,List<String>values){
-        if (name=='set-cookie') {
-          values.forEach((cookieStr){
-            resCookie='$resCookie''$cookieStr'';';
+      r.headers.forEach((String name, List<String> values) {
+        if (name == 'set-cookie') {
+          values.forEach((cookieStr) {
+            resCookie = '$resCookie' '$cookieStr' ';';
           });
         }
       });
       WanAndroidDio.instance.setCookie(resCookie);
       store.dispatch(RefreshUserInfoAction(userInfo));
-      if(afterSuccess!=null){
+      if (afterSuccess != null) {
         afterSuccess();
       }
 //      Navigator.of(context).pop();
@@ -133,8 +119,18 @@ class WanAndroidRepository {
   }
 
 //  收藏列表
-  void getFavoriteListFromNet(Store<WanAndroidState> store,int pageNo){
-    WanAndroidDio.instance.doGet(ApiAddress.favoriteApi(pageNo));
+  void getFavoriteListFromNet(Store<WanAndroidState> store, int pageNo) {
+    WanAndroidDio.instance.doGet(ApiAddress.favoriteApi(pageNo),
+        onSuccess: (d, r) {
+      var originalList = store.state.favoriteList;
+      List<FavoriteArticle> list = FavoriteArticleInfo.fromJson(d.data).datas;
+      if (pageNo == 0) {
+        originalList.clear();
+      }
+      originalList.addAll(list);
+      store.dispatch(RefreshFavoriteListAction(originalList));
+    });
   }
 }
+
 typedef void AfterSuccess();

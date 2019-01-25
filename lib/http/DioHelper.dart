@@ -2,19 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wan_android_flutter/WanAndroidNativeChannel.dart';
 import 'package:wan_android_flutter/beans/entity.dart';
-
-class DioHelper {
-  static get dio => _getDio();
-  static Dio _dio;
-
-  static _getDio() {
-    if (_dio == null) {
-      _dio = new Dio(Options(baseUrl: 'http://www.wanandroid.com/'));
-    }
-    return _dio;
-  }
-}
-
 class WanAndroidDio {
 //  errorCode = 0 代表执行成功，不建议依赖任何非0的 errorCode.
 //errorCode = -1001 代表登录失效，需要重新登录。
@@ -71,10 +58,20 @@ class WanAndroidDio {
 
     Map<String, String>  map = Map();
     map["Cookie"] = cookie;
-
-    Response r = isGet
-        ? await _dio.get(address, data: data, options: Options(headers: map))
+    Response r ;
+    try{
+      r  = isGet
+    ? await _dio.get(address, data: data, options: Options(headers: map))
         : await _dio.post(address, data: data,options: Options(headers: map));
+    }catch(e){
+
+    }
+    if(r==null){
+      if(onNetError!=null){
+        onNetError(-1,null);
+      }
+      return;
+    }
     if (r.statusCode == 200) {
       final WanAndroidBean responseData = WanAndroidBean.fromJson(r.data);
       if (responseData.errorCode == SUCCESS_CODE) {

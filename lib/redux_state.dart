@@ -9,7 +9,8 @@ class WanAndroidState {
 
 //  知识体系的下一个详情页面
   final KnowledgeSys knowledgeInfo;
-  final List<Article> favoriteList;
+//  收藏
+  final List<FavoriteArticle> favoriteList;
 //登录后的用户信息存储　
   final UserInfo userInfo;
 
@@ -19,7 +20,7 @@ class WanAndroidState {
       this.treeList,
       this.knowledgeInfo,
       this.favoriteList,
-      this.userInfo});
+      this.userInfo,});
 }
 
 WanAndroidState reduce(WanAndroidState state, dynamic action) {
@@ -48,16 +49,16 @@ var treeListReducer = combineReducers<List<KnowledgeSys>>(
 var knowledgeInfo = combineReducers<KnowledgeSys>([
   TypedReducer<KnowledgeSys, RefreshKnowledgeInfoAction>(_refreshKnowledgeInfo)
 ]);
-var favoriteList = combineReducers<List<Article>>([
-  TypedReducer<List<Article>, RefreshFavoriteListAction>(_refreshFavoriteList),
-  TypedReducer<List<Article>, AddFavoriteListAction>(_addFavoriteArticle),
+var favoriteList = combineReducers<List<FavoriteArticle>>([
+  TypedReducer<List<FavoriteArticle>, RefreshFavoriteListAction>(_refreshFavoriteList),
+  TypedReducer<List<FavoriteArticle>, AddFavoriteListAction>(_addFavoriteArticle),
 ]);
 UserInfo _getUserInfo(UserInfo userInfo, RefreshUserInfoAction action){
   return action.userInfo;
 }
-List<Article> _addFavoriteArticle(
-    List<Article> articleList, AddFavoriteListAction action) {
-  Article temp = action.article;
+List<FavoriteArticle> _addFavoriteArticle(
+    List<FavoriteArticle> articleList, AddFavoriteListAction action) {
+  FavoriteArticle temp = action.article;
   int articleId = temp.id;
   int count = -1;
   for (int i = 0; i < articleList.length; i++) {
@@ -97,8 +98,8 @@ KnowledgeSys _refreshKnowledgeInfo(
   return action.info;
 }
 
-List<Article> _refreshFavoriteList(
-    List<Article> list, RefreshFavoriteListAction action) {
+List<FavoriteArticle> _refreshFavoriteList(
+    List<FavoriteArticle> list, RefreshFavoriteListAction action) {
   return action.list;
 }
 
@@ -128,13 +129,13 @@ class RefreshKnowledgeInfoAction {
 }
 
 class RefreshFavoriteListAction {
-  final List<Article> list;
+  final List<FavoriteArticle> list;
 
   RefreshFavoriteListAction(this.list);
 }
 
 class AddFavoriteListAction {
-  final Article article;
+  final FavoriteArticle article;
 
   AddFavoriteListAction(this.article);
 }
