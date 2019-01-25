@@ -94,6 +94,20 @@ class WanAndroidRepository {
     });
   }
 
+////  获取收藏的文章
+//  void getFavoriteArticleList(Store<WanAndroidState> store) async {
+//    var favList = await ArticleDao.instance.getFavorite();
+//    store.dispatch(RefreshFavoriteListAction(favList));
+//  }
+//
+////  添加收藏的文章
+//  void addFavoriteArticleList(
+//      Store<WanAndroidState> store, Article article) async {
+////    将添加的文章放入数据库中
+//    await ArticleDao.instance.insert(article);
+//    store.dispatch(AddFavoriteListAction(article));
+//  }
+
 //  登录
   void login(Store<WanAndroidState> store, String userName, String passWord,
       {AfterSuccess afterSuccess}) async {
@@ -121,14 +135,20 @@ class WanAndroidRepository {
 //  收藏列表
   void getFavoriteListFromNet(Store<WanAndroidState> store, int pageNo) {
     WanAndroidDio.instance.doGet(ApiAddress.favoriteApi(pageNo),
-        onSuccess: (d, r) {
+        onSuccess: (d, r) async{
       var originalList = store.state.favoriteList;
       List<FavoriteArticle> list = FavoriteArticleInfo.fromJson(d.data).datas;
+      await FavoriteArticleDao.instance.deleteAll();
+      await FavoriteArticleDao.instance.insert(list);
       if (pageNo == 0) {
         originalList.clear();
       }
       originalList.addAll(list);
       store.dispatch(RefreshFavoriteListAction(originalList));
+    }, onNetError: (a, b) async {
+//      从数据库中获取
+      store.dispatch(RefreshFavoriteListAction(
+          await FavoriteArticleDao.instance.getAllFavoriteArticle()));
     });
   }
 }

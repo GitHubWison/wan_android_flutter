@@ -39,15 +39,15 @@ class FavoriteState extends State<FavoritePage> {
     return StoreProvider.of(context);
   }
 
-  Future<Null> _onRefresh() {
+  Future<Null> _onRefresh() async{
     _pageNo = 0;
     WanAndroidRepository.instance.getFavoriteListFromNet(_getStore(), _pageNo);
     return null;
   }
 
-  Future<Null> _onLoadMore() {
+  Future<Null> _onLoadMore() async{
     _pageNo += 1;
-    WanAndroidRepository.instance.getFavoriteListFromNet(_getStore(), _pageNo);
+     WanAndroidRepository.instance.getFavoriteListFromNet(_getStore(), _pageNo);
     return null;
   }
 

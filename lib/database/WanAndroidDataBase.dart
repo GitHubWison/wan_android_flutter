@@ -65,6 +65,7 @@ class FavoriteArticleDao {
     }
     return null;
   }
+
 //插入单个文章
   Future<Null> insertSingleArticle(FavoriteArticle article) async {
     Database db = await WandAndroidDataBaseHelper.getDb();
@@ -84,6 +85,15 @@ class FavoriteArticleDao {
     Database db = await WandAndroidDataBaseHelper.getDb();
     db.delete(tb_name, where: 'id=?', whereArgs: [id]);
     return null;
+  }
+
+//  获取所有收藏的文章
+  Future<List<FavoriteArticle>> getAllFavoriteArticle() async {
+    Database db = await WandAndroidDataBaseHelper.getDb();
+    return (await db.query(tb_name)).map((m) {
+      return FavoriteArticle.fromJson(m);
+    }).toList();
+
   }
 }
 
